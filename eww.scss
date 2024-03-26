@@ -1,0 +1,38 @@
+* {
+  all: unset;
+}
+
+.workspace {
+  font-size: 25px;
+  background-color: gray;
+  border-radius: 5px 5px 5px 5px;
+  padding: 5px 5px 5px 5px;
+
+}
+
+.time {}
+
+.time.hm {
+  font-size: 38px;
+  font-weight: bold;
+  border-radius: 5px 0px 0px 5px;
+  padding-left: 3px;
+  color: Yellow;
+  margin-left: 10px;
+}
+
+.time.sec {
+  font-size: 20px;
+  font-weight: normal;
+  border-radius: 0px 5px 5px 0px;
+  padding-right: 3px;
+  margin-top: 12px;
+}
+
+.info {
+  font-size: 25px;
+  margin-right: 10px;
+  background-color: gray;
+  border-radius: 5px 5px 5px 5px;
+  padding: 3px 3px 3px 3px;
+}
