@@ -1,3 +1,9 @@
+;;Variables
+
+(defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
+(defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
+(deflisten ipc "script/ipc")
+
 (defwindow bar
   :monitor 0
   :stacking "fg"
@@ -5,14 +11,17 @@
   :wm-ignore true
   :orientation "horizontal"
   :focuable true
-  :geometry (geometry :x "0%" :y "40%"  :width "100%" :height "20px")
+  :geometry (geometry :x "0%" :y "95%"  :width "100%" :height "20px")
   (layout))
 
 (defwidget layout []
   (box
-    (box
+    :valign "baseline"
+    :spacing 5
+    (box ;; date 
       :orientation "h" 
       :halign "start"
+      :active true
       (box
         :class "time hm" 
         :halign "start" 
@@ -21,26 +30,19 @@
         :class "time sec" 
         :halign "start" 
         (label :text sec)))
-    (button
+    (button ;; workspace
       :class "workspace"
-      :orientation "h"
       :halign "center"
       :onclick "do something"
-      (label :text "workspace name"))
-    (button
+      (ipc))
+      ;; (label :text "workspace name"))
+    (button ;; info
       :class "info"
-      :orientation "h"
       :halign "end"
       :onclick "do something"
       (label :text "info"))))
 
-(defpoll hm :interval "60s"
-              :initial "initial-value"
-         `date +%H:%M`)
-(defpoll sec :interval "1s"
-             :initial "initial-value"
-         `date +:%S`)
+(defwidget ipc []
+  (label :text {ipc}))
 
-(deflisten foo :initial "whatever"
-  `tail -F ~/foo`)
 
