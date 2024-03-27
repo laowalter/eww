@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Check if the argument is provided
+if [[ -z "$1" ]]; then
+    echo "Please provide the switch argument (e.g., DP-1)"
+    exit 1
+fi
+# Run the command and capture its output
+output=$(hyprctl workspaces | grep "$1" | awk '{print substr($4, 2, length($4)-2)}')
+
+# Extract the numbers, sort them, and format the output
+sorted_numbers=$(echo "$output" | sort -V | tr '\n' ',' | awk '{$1=$1};1' | sed 's/,$//')
+formatted_output="[$sorted_numbers]"
+
+# Print the result
+echo "$formatted_output"

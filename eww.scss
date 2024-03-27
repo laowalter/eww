@@ -4,10 +4,15 @@
 
 .workspace {
   font-size: 25px;
-  background-color: gray;
+  background-color: green;
   border-radius: 5px 5px 5px 5px;
-  padding: 5px 5px 5px 5px;
+  background-color: grey;
+  // padding: 5px 5px 5px 5px;
+}
 
+.workspace.btn {
+  padding: 0px 0px 0px 0px;
+  font-size: 16px;
 }
 
 .time {
@@ -18,18 +23,19 @@
   font-size: 38px;
   font-weight: bold;
   border-radius: 5px 0px 0px 5px;
-  padding-left: 3px;
+  padding-left: 2px;
   color: Yellow;
   margin-left: 10px;
 }
 
 .time.sec {
+  margin-left: 0;
+  padding-left: 0;
   font-size: 20px;
   font-weight: normal;
   border-radius: 0px 5px 5px 0px;
-  padding-right: 3px;
+  padding-right: 0px;
   padding-top: 12px;
-  // margin-top: 12px;
 }
 
 .info {

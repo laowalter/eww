@@ -15,9 +15,9 @@
   (layout))
 (defwidget layout []
   (box
+    :valign "baseline"
+    :spacing 5
     (box ;; date 
-      :spacing 5
-      :valign "baseline"
       :orientation "h" 
       :halign "start"
       :active true
@@ -29,10 +29,11 @@
         :class "time sec" 
         :halign "start" 
         (label :text sec)))
-    (box
+    (button ;; workspace
       :class "workspace"
       :halign "center"
-      (literal :content workspace_ipc))
+      :onclick "do something"
+      (workspace))
     (button ;; info
       :class "info"
       :halign "end"

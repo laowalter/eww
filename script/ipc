@@ -2,7 +2,8 @@
 
 handle() {
   case $1 in
-    activewindow*) ~/.config/eww/script/workspace ;;
+    # activewindow*) ~/.config/eww/script/current_workspace ;;
+    activewindow*) ~/.config/eww/script/list_workspaces DP-2;;
   esac
 }
 
