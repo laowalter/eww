@@ -3,6 +3,7 @@
 (defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
 (deflisten workspace_ipc "script/ipc")
+(defvar workspace_eventbox "workspace eventbox")
 
 (defwindow bar_1
   :monitor 0
@@ -11,7 +12,7 @@
   :wm-ignore true
   :orientation "horizontal"
   :focuable true
-  :geometry (geometry :x "0%" :y "95%"  :width "100%" :height "50px")
+  :geometry (geometry :x "0%" :y "5%"  :width "100%" :height "50px")
   (layout))
 (defwidget layout []
   (box
@@ -33,7 +34,8 @@
       :class "workspace"
       :halign "center"
       :valign "center"
-      (literal :content workspace_ipc))
+      (literal :valign "center"
+               :content workspace_ipc))
     (button ;; info
       :class "info"
       :halign "end"

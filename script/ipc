@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+script_dir="$HOME/.config/eww/script"
 handle() {
   case $1 in
-    # activewindow*) ~/.config/eww/script/current_workspace ;;
-    activewindow*) ~/.config/eww/script/list_workspaces DP-2;;
+    activewindow*) 
+      {
+        "$script_dir/list_workspaces" DP-1
+      };;
+    workspace*) 
+      {
+        "$script_dir/list_workspaces" DP-1
+      };;
   esac
 }
 

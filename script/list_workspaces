@@ -11,8 +11,37 @@ output=$(hyprctl workspaces | grep "$1" | awk '{print substr($4, 2, length($4)-2
 
 # Extract the numbers, sort them, and format the output
 # sorted_numbers=$(echo "$output" | sort -V | awk '{print "(button :class \"workspace btn\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
-sorted_numbers=$(echo "$output" | sort -V | awk '{print "(eventbox :class \"workspace eventbox\" :onhover \"do hover\" :tooltip \"a tooltip\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
+sorted_numbers=$(echo "$output" | sort -V | awk \
+    '{print "(eventbox \
+        :class \"workspace_eventbox\" \
+        :tooltip \"a tooltip\" \
+        :onclick \"hyprctl dispatch workspace " $1 " \" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
+
 formatted_output="(box $sorted_numbers)"
 
-# Print the result
-echo "$formatted_output"
+current_workspace=$(hyprctl activewindow|grep workspace:|cut -d" " -f3|cut -d"(" -f2|cut -d")" -f1)
+
+# echo "current_workspace: $current_workspace"
+# echo "$formatted_output"
+# echo "---------------"
+
+# 将字符串转换为数组，以 '(' 分割
+IFS='(' read -ra eventboxes <<< "$formatted_output"
+
+# 初始化替换后的结果字符串
+result=""
+
+# 遍历 eventboxes 数组
+for eventbox in "${eventboxes[@]}"; do
+    # 判断是否以 "'2')" 结尾
+    if [[ "$eventbox" == *"'$current_workspace')"* ]]; then
+        # 进行替换
+        eventbox="${eventbox/:class \"workspace_eventbox\"/:class \"eventboxfocus\"}"
+    fi
+    # 将处理后的 eventbox 添加到结果字符串中
+    result+="($eventbox"
+done
+# 去除结果字符串开头的多余括号
+result="${result#(}"
+# 输出结果字符串
+echo "$result"
