@@ -1,3 +1,5 @@
+$surface-lightgrey: #3d464e;
+
 * {
   all: unset;
 }
@@ -7,12 +9,26 @@
   background-color: green;
   border-radius: 5px 5px 5px 5px;
   background-color: grey;
-  // padding: 5px 5px 5px 5px;
+  padding: 10px 10px 10px 10px;
 }
 
-.workspace.btn {
-  padding: 0px 0px 0px 0px;
-  font-size: 16px;
+.workspace.eventbox {
+  padding: 5px 5px 5px 5px;
+  font-size: 20px;
+  padding-top: 50px;
+  margin-left: 20px;
+
+  &:hover {
+    // all: unset;
+    font-size: 30px;
+    font-family: Iosevka;
+    font-weight: 400;
+    transition: 200ms linear background-color, border-radius;
+    background-color: rgba($surface-lightgrey, 0.6);
+    border-radius: 15px;
+  }
+
+  // min-width: 0;
 }
 
 .time {

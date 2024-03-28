@@ -10,7 +10,8 @@ fi
 output=$(hyprctl workspaces | grep "$1" | awk '{print substr($4, 2, length($4)-2)}')
 
 # Extract the numbers, sort them, and format the output
-sorted_numbers=$(echo "$output" | sort -V | awk '{print "(button :class \"workspace btn\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
+# sorted_numbers=$(echo "$output" | sort -V | awk '{print "(button :class \"workspace btn\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
+sorted_numbers=$(echo "$output" | sort -V | awk '{print "(eventbox :class \"workspace eventbox\" :onhover \"do hover\" :tooltip \"a tooltip\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
 formatted_output="(box $sorted_numbers)"
 
 # Print the result
