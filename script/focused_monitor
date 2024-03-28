@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# 获取 hyprctl monitors 的输出
+output=$(hyprctl monitors)
+
+# 使用 awk 分割输出，并遍历每个部分
+awk -v RS="Monitor " '{
+    # 如果当前部分包含 "focused: yes"，则打印 Monitor 的值并退出循环
+    if ($0 ~ /focused: yes/) {
+        print $1
+        exit
+    }
+}' <<< "$output"

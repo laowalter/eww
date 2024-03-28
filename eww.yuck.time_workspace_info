@@ -1,0 +1,49 @@
+;;Variables
+
+(defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
+(defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
+(deflisten workspace_ipc "script/ipc")
+(defvar workspace_eventbox "workspace eventbox")
+
+(defwindow bar_1
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :wm-ignore true
+  :orientation "horizontal"
+  :focuable true
+  :geometry (geometry :x "0%" :y "5%"  :width "100%" :height "50px")
+  (layout))
+(defwidget layout []
+  (box
+    (box ;; date 
+      :spacing 5
+      :valign "baseline"
+      :orientation "h" 
+      :halign "start"
+      :active true
+      (box
+        :class "time hm" 
+        :halign "start" 
+        (label :text hm))
+      (box
+        :class "time sec" 
+        :halign "start" 
+        (label :text sec)))
+    (box
+      :class "workspace"
+      :halign "center"
+      :valign "center"
+      (literal :valign "center"
+               :content workspace_ipc))
+    (button ;; info
+      :class "info"
+      :halign "end"
+      :onclick "do something"
+      (label :text "info"))))
+(defvar workspace_contain_yuck
+  "(box (button 'foo') (button 'bar'))")
+(defwidget workspace []
+  (label :text {workspace_ipc}))
+
+

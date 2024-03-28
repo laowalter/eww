@@ -1,16 +1,26 @@
 #!/usr/bin/env bash
 
 script_dir="$HOME/.config/eww/script"
+
+
+monitor=$("$script_dir/focused_monitor")
+
 handle() {
   case $1 in
     activewindow*) 
       {
-        "$script_dir/list_workspaces" DP-1
+        "$script_dir/list_workspaces" "$monitor"
       };;
     workspace*) 
       {
-        "$script_dir/list_workspaces" DP-1
+        "$script_dir/list_workspaces" "$monitor"
       };;
+    focusedmon*)
+      {
+        monitor=$("$script_dir/focused_monitor")
+        "$script_dir/list_workspaces" "$monitor"
+      };;
+
   esac
 }
 

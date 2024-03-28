@@ -13,7 +13,7 @@ output=$(hyprctl workspaces | grep "$1" | awk '{print substr($4, 2, length($4)-2
 # sorted_numbers=$(echo "$output" | sort -V | awk '{print "(button :class \"workspace btn\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
 sorted_numbers=$(echo "$output" | sort -V | awk \
     '{print "(eventbox \
-        :class \"workspace_eventbox\" \
+        :class \"workspace eventbox\" \
         :tooltip \"a tooltip\" \
         :onclick \"hyprctl dispatch workspace " $1 " \" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
 
@@ -30,13 +30,12 @@ IFS='(' read -ra eventboxes <<< "$formatted_output"
 
 # 初始化替换后的结果字符串
 result=""
-
 # 遍历 eventboxes 数组
 for eventbox in "${eventboxes[@]}"; do
     # 判断是否以 "'2')" 结尾
     if [[ "$eventbox" == *"'$current_workspace')"* ]]; then
         # 进行替换
-        eventbox="${eventbox/:class \"workspace_eventbox\"/:class \"eventboxfocus\"}"
+        eventbox="${eventbox/:class \"workspace eventbox\"/:class \"workspace eventboxfocus\"}"
     fi
     # 将处理后的 eventbox 添加到结果字符串中
     result+="($eventbox"

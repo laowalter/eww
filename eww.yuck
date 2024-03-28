@@ -5,45 +5,43 @@
 (deflisten workspace_ipc "script/ipc")
 (defvar workspace_eventbox "workspace eventbox")
 
-(defwindow bar_1
+(defwidget workspace []
+  (label :text {workspace_ipc}))
+
+(defwindow bar0
   :monitor 0
   :stacking "fg"
-  :windowtype "normal"
+  :windowtype "desktop"
   :wm-ignore true
   :orientation "horizontal"
   :focuable true
-  :geometry (geometry :x "0%" :y "5%"  :width "100%" :height "50px")
+  :geometry (geometry :x "0" :y "0"  :width "100%" :height "30px" :anchor "top center")
+  (layout))
+
+(defwidget layout []
+  (box
+    :class "workspace"
+    :halign "center"
+    (literal :valign "center"
+             :content workspace_ipc)))
+
+(defwindow bar1
+  :monitor 1
+  :stacking "fg"
+  :windowtype "desktop"
+  :wm-ignore true
+  :orientation "horizontal"
+  :focuable true
+  :geometry (geometry :x "0%" :y "0%"  :width "100%" :height "50px")
+  :reserve (struts :distance "30px" :side "bottom")
   (layout))
 (defwidget layout []
   (box
-    (box ;; date 
-      :spacing 5
-      :valign "baseline"
-      :orientation "h" 
-      :halign "start"
-      :active true
-      (box
-        :class "time hm" 
-        :halign "start" 
-        (label :text hm))
-      (box
-        :class "time sec" 
-        :halign "start" 
-        (label :text sec)))
-    (box
-      :class "workspace"
-      :halign "center"
-      :valign "center"
-      (literal :valign "center"
-               :content workspace_ipc))
-    (button ;; info
-      :class "info"
-      :halign "end"
-      :onclick "do something"
-      (label :text "info"))))
-(defvar workspace_contain_yuck
-  "(box (button 'foo') (button 'bar'))")
-(defwidget workspace []
-  (label :text {workspace_ipc}))
+    :class "workspace"
+    :halign "center"
+    :valign "center"
+    (literal :valign "center"
+             :content workspace_ipc)))
+
 
 
