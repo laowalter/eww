@@ -1,0 +1,7 @@
+1. get current / active window id
+  
+    hyprctl activewindow| grep -G '^Window'|cut -d' ' -f2
+
+2. get activewindow content 50 char at most
+    
+   hyprctl clients|grep 56126d069cc0|sed -e 's/^Window.*-> //'|cut -c -50
