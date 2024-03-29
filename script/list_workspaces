@@ -15,32 +15,31 @@ sorted_numbers=$(echo "$output" | sort -V | awk \
     '{print "(eventbox \
         :class \"workspace eventbox\" \
         :tooltip \"a tooltip\" \
-        :onclick \"hyprctl dispatch workspace " $1 " \" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
-
-formatted_output="(box $sorted_numbers)"
+        :onclick \"hyprctl dispatch workspace \x27" $1 "\x27\" \
+        (label :width 25 :limit-width 60 :text \"\x27" $1 "\x27\"))"}' \
+        |tr -s ' '|tr '\n' ' '|sed "s/'//g")
+        formatted_output="(box $sorted_numbers)"
 
 current_workspace=$(hyprctl activewindow|grep workspace:|cut -d" " -f3|cut -d"(" -f2|cut -d")" -f1)
 
 # echo "current_workspace: $current_workspace"
 # echo "$formatted_output"
 # echo "---------------"
+# formatted_output='(box (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace 8" (label :width 25 :limit-width 60 :text "8")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Ai" (label :width 25 :limit-width 60 :text "Ai")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Flee" (label :width 25 :limit-width 60 :text "Flee")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Safer" (label :width 25 :limit-width 60 :text "Safer")) )'
+# current_workspace="Safer"
 
-# 将字符串转换为数组，以 '(' 分割
-IFS='(' read -ra eventboxes <<< "$formatted_output"
+# Split formatted_output into an array of eventboxes
+IFS=")" read -r -a eventboxes <<< "$formatted_output"
 
-# 初始化替换后的结果字符串
-result=""
-# 遍历 eventboxes 数组
-for eventbox in "${eventboxes[@]}"; do
-    # 判断是否以 "'2')" 结尾
-    if [[ "$eventbox" == *"'$current_workspace')"* ]]; then
-        # 进行替换
-        eventbox="${eventbox/:class \"workspace eventbox\"/:class \"workspace eventboxfocus\"}"
+# Iterate over each eventbox
+for (( i=0; i<${#eventboxes[@]}; i++ )); do
+    if [[ "${eventboxes[i]}" == *":text \"$current_workspace\""* ]]; then
+        # Replace class value with "workspace eventboxfocus"
+        eventboxes[i]="${eventboxes[i]/\"workspace eventbox\"/\"workspace eventboxfocus\"}"
     fi
-    # 将处理后的 eventbox 添加到结果字符串中
-    result+="($eventbox"
 done
-# 去除结果字符串开头的多余括号
-result="${result#(}"
-# 输出结果字符串
-echo "$result"
+
+# Merge modified eventboxes back into formatted_output
+modified_output="$(IFS=")"; echo "${eventboxes[*]}")"
+
+echo "$modified_output)"

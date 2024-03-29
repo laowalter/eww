@@ -1,47 +1,36 @@
 ;;Variables
-
 (defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
 (deflisten workspace_ipc "script/ipc")
 (defvar workspace_eventbox "workspace eventbox")
+(defwidget workspace [] (label :text {workspace_ipc}))
 
-(defwidget workspace []
-  (label :text {workspace_ipc}))
-
-(defwindow bar0
-  :monitor 0
-  :stacking "fg"
-  :windowtype "desktop"
-  :wm-ignore true
-  :orientation "horizontal"
-  :focuable true
-  :geometry (geometry :x "0" :y "0"  :width "100%" :height "30px" :anchor "top center")
-  (layout))
-
-(defwidget layout []
+(defwidget workspace_layout []
   (box
     :class "workspace"
     :halign "center"
     (literal :valign "center"
              :content workspace_ipc)))
+
+;; Window bar
+(defwindow bar0
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :exclusive true
+  :orientation "horizontal"
+  :focusable false
+  :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
+  (workspace_layout))
+
 
 (defwindow bar1
   :monitor 1
   :stacking "fg"
-  :windowtype "desktop"
-  :wm-ignore true
+  :windowtype "normal"
+  :exclusive true
   :orientation "horizontal"
-  :focuable true
-  :geometry (geometry :x "0%" :y "0%"  :width "100%" :height "50px")
-  :reserve (struts :distance "30px" :side "bottom")
-  (layout))
-(defwidget layout []
-  (box
-    :class "workspace"
-    :halign "center"
-    :valign "center"
-    (literal :valign "center"
-             :content workspace_ipc)))
-
-
+  :focusable false
+  :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
+  (workspace_layout))
 
