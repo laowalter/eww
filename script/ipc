@@ -1,27 +1,38 @@
 #!/usr/bin/env bash
 
+# Define the directory where scripts are located
 script_dir="$HOME/.config/eww/script"
 
+# Determine the focused monitor using the provided script
+monitor=$1
 
-monitor=$("$script_dir/focused_monitor")
-
+# Function to handle different commands/messages
 handle() {
-  case $1 in
+  # Use descriptive variable name instead of $1
+  case $command in
     activewindow*) 
       {
+        # Call script with descriptive name for the monitor
         "$script_dir/list_workspaces" "$monitor"
       };;
     workspace*) 
       {
+        # Call script with descriptive name for the monitor
         "$script_dir/list_workspaces" "$monitor"
       };;
     focusedmon*)
       {
-        monitor=$("$script_dir/focused_monitor")
+        # Update monitor using provided script and call script with descriptive name for the monitor
+        # monitor=$("$script_dir/focused_monitor")
         "$script_dir/list_workspaces" "$monitor"
       };;
-
   esac
 }
 
-socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do handle "$line"; done
+# Read messages from a Unix domain socket and pass them to the handle function
+socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do
+  # Assign a more descriptive name to the command variable
+  command="$line"
+  handle
+done
+

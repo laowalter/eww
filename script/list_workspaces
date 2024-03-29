@@ -16,17 +16,11 @@ sorted_numbers=$(echo "$output" | sort -V | awk \
         :class \"workspace eventbox\" \
         :tooltip \"a tooltip\" \
         :onclick \"hyprctl dispatch workspace \x27" $1 "\x27\" \
-        (label :width 25 :limit-width 60 :text \"\x27" $1 "\x27\"))"}' \
+        (label :width 35 :limit-width 10 :text \"\x27" $1 "\x27\"))"}' \
         |tr -s ' '|tr '\n' ' '|sed "s/'//g")
         formatted_output="(box $sorted_numbers)"
 
 current_workspace=$(hyprctl activewindow|grep workspace:|cut -d" " -f3|cut -d"(" -f2|cut -d")" -f1)
-
-# echo "current_workspace: $current_workspace"
-# echo "$formatted_output"
-# echo "---------------"
-# formatted_output='(box (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace 8" (label :width 25 :limit-width 60 :text "8")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Ai" (label :width 25 :limit-width 60 :text "Ai")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Flee" (label :width 25 :limit-width 60 :text "Flee")) (eventbox :class "workspace eventbox" :tooltip "a tooltip" :onclick "hyprctl dispatch workspace Safer" (label :width 25 :limit-width 60 :text "Safer")) )'
-# current_workspace="Safer"
 
 # Split formatted_output into an array of eventboxes
 IFS=")" read -r -a eventboxes <<< "$formatted_output"

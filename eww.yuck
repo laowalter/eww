@@ -1,16 +1,9 @@
 ;;Variables
 (defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
-(deflisten workspace_ipc "script/ipc")
+(deflisten workspace_ipc_DP1 "script/ipc DP-1")
+(deflisten workspace_ipc_DP2 "script/ipc DP-2")
 (defvar workspace_eventbox "workspace eventbox")
-(defwidget workspace [] (label :text {workspace_ipc}))
-
-(defwidget workspace_layout []
-  (box
-    :class "workspace"
-    :halign "center"
-    (literal :valign "center"
-             :content workspace_ipc)))
 
 ;; Window bar
 (defwindow bar0
@@ -21,8 +14,11 @@
   :orientation "horizontal"
   :focusable false
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
-  (workspace_layout))
-
+  (box
+    :class "workspace"
+    :halign "center"
+    (literal :valign "center"
+             :content workspace_ipc_DP1)))
 
 (defwindow bar1
   :monitor 1
@@ -32,5 +28,8 @@
   :orientation "horizontal"
   :focusable false
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
-  (workspace_layout))
-
+  (box
+    :class "workspace"
+    :halign "center"
+    (literal :valign "center"
+             :content workspace_ipc_DP2)))
