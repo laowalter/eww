@@ -6,14 +6,14 @@ if [[ -z "$1" ]]; then
     exit 1
 fi
 
-# Run the command and capture its output
+# Run the command and capture its output: Ai local 1 Flee
 output=$(hyprctl workspaces | grep "$1" | awk '{print substr($4, 2, length($4)-2)}')
-
 # Extract the numbers, sort them, and format the output
 # sorted_numbers=$(echo "$output" | sort -V | awk '{print "(button :class \"workspace btn\" \x27" $1 "\x27)"}' | tr '\n' ' ' | sed 's/ $//')
 sorted_numbers=$(echo "$output" | sort -V | awk \
     '{print "(eventbox \
         :class \"workspace eventbox\" \
+        :tooltip \"a tooltip\" \
         :onclick \"hyprctl dispatch workspace \x27" $1 "\x27\" \
         (label :width 35 :limit-width 10 :text \"\x27" $1 "\x27\"))"}' \
         |tr -s ' '|tr '\n' ' '|sed "s/'//g")

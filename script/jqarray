@@ -1,0 +1,8 @@
+#!/bin/bash
+
+clients=$(hyprctl -j clients)
+
+while read clients
+do
+  name=
+

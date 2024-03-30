@@ -1,6 +1,7 @@
 ;;Variables
-(defpoll hm :interval "60s" :initial "initial-value" `date +%H:%M`)
-(defpoll sec :interval "1s" :initial "initial-value" `date +:%S`)
+(defpoll hm :interval "60s" :initial "" `date +%H:%M`)
+(defpoll sec :interval "1s" :initial "" `date +:%S`)
+(defpoll weekday :interval "3600s" :initial "" `date +%A`)
 (deflisten workspace_ipc_DP1 "script/ipc DP-1")
 (deflisten workspace_ipc_DP2 "script/ipc DP-2")
 (defvar workspace_eventbox "workspace eventbox")
@@ -28,8 +29,27 @@
   :orientation "horizontal"
   :focusable false
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
-  (box
-    :class "workspace"
-    :halign "center"
-    (literal :valign "center"
-             :content workspace_ipc_DP2)))
+  (centerbox
+    (box
+      :halign "start"
+      (box
+        :class "timehm" 
+        :halign "start" 
+        (label :text hm))
+      (box
+        :class "timesec" 
+        :halign "start" 
+        (label :text sec))
+      (box
+        :class "weekday"
+        :halign "start"
+        (label :text weekday)))
+    (box
+      :class "workspace"
+      :halign "center"
+      (literal :valign "center"
+               :content workspace_ipc_DP2))
+    (box
+      :class "info"
+      :halign "end"
+      (label :text "MEM: ${EWW_RAM.free_mem/1000000000}" ))))

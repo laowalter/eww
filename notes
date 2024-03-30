@@ -5,3 +5,16 @@
 2. get activewindow content 50 char at most
     
    hyprctl clients|grep 56126d069cc0|sed -e 's/^Window.*-> //'|cut -c -50
+
+3. cut the 1st char from a string
+   
+   cut -c2-
+
+4. cut the last char from string
+   
+   v="some strings"
+   v2=${v::-1}
+
+5. jq array 
+
+   https://stackoverflow.com/questions/68121082/how-to-iterate-over-json-array-with-jq
