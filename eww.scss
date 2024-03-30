@@ -55,38 +55,41 @@ $urgent: $red;
   background-color: rgba($lightred, 0.6);
 }
 
-.time {
-  margin-right: 0px;
-}
 
 .timehm {
-  font-size: 25px;
+  margin: 2px 0 0 2px;
+  font-size: 22px;
   font-weight: bold;
   border-radius: 5px 0px 0px 5px;
   padding-left: 2px;
   color: $yellow;
   margin-left: 10px;
+  background-color: rgba($background, 0.5);
 }
 
 .timesec {
-  margin-left: 0;
+  margin: 2px 2px 0 0;
   padding-left: 0;
-  font-weight: normal;
+  font-weight: 300;
+  background-color: rgba($background, 0.5);
   border-radius: 0px 5px 5px 0px;
   padding-right: 0px;
 }
 
 .weekday {
-  all: unset;
   margin-top: 2px;
+  margin-left: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
   color: $yellow;
   font-size: 20px;
   font-weight: 400;
   border-radius: 5px 5px 5px 5px;
+  background-color: rgba($background, 0.5);
 }
 
 .info {
   margin-right: 10px;
-  background-color: gray;
-  border-radius: 5px 5px 5px 5px;
+  font-size: 15px;
+  // font-weight: 300;
 }

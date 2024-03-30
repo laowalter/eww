@@ -2,6 +2,7 @@
 (defpoll hm :interval "60s" :initial "" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "" `date +:%S`)
 (defpoll weekday :interval "3600s" :initial "" `date +%A`)
+(defpoll temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
 (deflisten workspace_ipc_DP1 "script/ipc DP-1")
 (deflisten workspace_ipc_DP2 "script/ipc DP-2")
 (defvar workspace_eventbox "workspace eventbox")
@@ -30,19 +31,19 @@
   :focusable false
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
   (centerbox
+    :valign "start"
+    :vexpand false
     (box
       :halign "start"
+      :space-evenly false
       (box
         :class "timehm" 
-        :halign "start" 
         (label :text hm))
       (box
         :class "timesec" 
-        :halign "start" 
         (label :text sec))
       (box
         :class "weekday"
-        :halign "start"
         (label :text weekday)))
     (box
       :class "workspace"
@@ -52,4 +53,6 @@
     (box
       :class "info"
       :halign "end"
-      (label :text "MEM: ${EWW_RAM.free_mem/1000000000}" ))))
+      (label :text "M:${round(EWW_RAM.free_mem/1000000000, 0)}G/32G" :style "color: black")
+      (label :text "CPU/GPU: ${temperature}" :style "color: black")
+    )))
