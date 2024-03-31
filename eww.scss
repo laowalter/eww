@@ -27,7 +27,6 @@ $urgent: $red;
 }
 
 .workspace {
-  font-size: 20px;
   margin-top: 2px;
   // margin-bottom: 2px;
   // border-radius: 5px 5px 5px 5px;
@@ -39,10 +38,12 @@ $urgent: $red;
   padding: 5px 5px 0px 5px;
   font-weight: 300;
   padding-top: 30px;
+  font-size: 20px;
 
   &:hover {
     background-color: rgba($lightblue, 0.6);
-    border-radius: 15px;
+    padding: 5px 10px 0px 10px;
+    border-radius: 7px 7px 7px 7px;
   }
 }
 
@@ -51,7 +52,7 @@ $urgent: $red;
   min-width: 50px;
   font-weight: 300;
   font-size: 20px;
-  border-radius: 25px 25px 25px 25px;
+  border-radius: 7px 7px 7px 7px;
   background-color: rgba($lightred, 0.6);
 }
 
@@ -89,7 +90,12 @@ $urgent: $red;
 }
 
 .info {
-  margin-right: 10px;
   font-size: 15px;
-  // font-weight: 300;
+  margin-right: 5px;
+  font-weight: 300;
+  color: $white;
+}
+
+.info.mem {
+  margin-left: 5px;
 }

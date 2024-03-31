@@ -52,7 +52,8 @@
                :content workspace_ipc_DP2))
     (box
       :class "info"
+      :space-evenly "false"
       :halign "end"
-      (label :text "M:${round(EWW_RAM.free_mem/1000000000, 0)}G/32G" :style "color: black")
-      (label :text "CPU/GPU: ${temperature}" :style "color: black")
+      (label :text "MEM:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem"  :style "color: black")
+      (label :text "CPU/GPU: ${temperature}" :class "info mem" :style "color: black")
     )))
