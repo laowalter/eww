@@ -3,8 +3,8 @@
 (defpoll sec :interval "1s" :initial "" `date +:%S`)
 (defpoll weekday :interval "3600s" :initial "" `date +%A`)
 (defpoll temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
-(deflisten workspace_ipc_DP1 "script/ipc DP-1")
-(deflisten workspace_ipc_DP2 "script/ipc DP-2")
+(deflisten workspace_ipc_DP1 "script/ipc 0")
+(deflisten workspace_ipc_DP2 "script/ipc 1")
 (defvar workspace_eventbox "workspace eventbox")
 
 ;; Window bar

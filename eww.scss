@@ -35,7 +35,7 @@ $urgent: $red;
   // background-color: $background;
 }
 
-.workspace.eventbox {
+.workspace.nofocus {
   padding: 5px 5px 0px 5px;
   font-weight: 300;
   padding-top: 30px;
@@ -46,7 +46,7 @@ $urgent: $red;
   }
 }
 
-.workspace.eventboxfocus {
+.workspace.focus {
   padding: 5px 5px 0px 5px;
   min-width: 50px;
   font-weight: 300;
@@ -55,6 +55,14 @@ $urgent: $red;
   background-color: rgba($lightred, 0.6);
 }
 
+.workspace.prefocus {
+  padding: 5px 5px 0px 5px;
+  min-width: 50px;
+  font-weight: 300;
+  font-size: 20px;
+  border-radius: 25px 25px 25px 25px;
+  background-color: rgba($lightgreen, 0.6);
+}
 
 .timehm {
   margin: 2px 0 0 2px;

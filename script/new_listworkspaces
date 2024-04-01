@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+if [[ -z "$1" ]]; then
+    echo "Please provide the switch argument (e.g., DP-1)"
+    exit 1
+fi
+
+monitor_queryed=$1
+
+# Get specific monitor $1 's workspaces list output: 1\n3\n10\n
+current_monitor_workspaces=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitor=="'$monitor_queryed'").name')
+active_monitor=$(hyprctl -j monitors | jq -r '.[]|select(.focused)|.name')
+active_workspace_name=$(hyprctl activewindow -j|jq -r '.workspace.name')
+# Split current_monitor_workspaces by \n into workspaces
+SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+IFS=$'\n'      # Change IFS to newline char
+workspaces=($current_monitor_workspaces) # split the `current_monitor_workspaces` string into an array by the same name
+IFS=$SAVEIFS   # Restore original IFS
+
+result=''
+prefocus_space=''
+for (( i=0; i<${#workspaces[@]}; i++ )) do
+
+    if [[ $monitor_queryed == $active_monitor && $active_workspace_name == ${workspaces[i]} ]]; then
+        class_attr="\"workspace focus\""
+        prefocus_space=${workspaces[i]}
+    else
+        if [[ $monitor_queryed != $active_monitor && $prefocus_space != ${workspaces[i]} ]]; then
+            class_attr="\"workspace prefocus\""
+        else
+            class_attr="\"workspace nofocus\""
+        fi
+    fi
+    result=${result}"(eventbox :class ${class_attr} \
+                            :onclick \"hyprctl dispatch workspace ${workspaces[i]})\" \
+                            (label :width 35 :limit-width 10 :text \"${workspaces[i]}\"))"
+done
+echo ${result}
+
