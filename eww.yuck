@@ -1,7 +1,9 @@
 ;;Variables
 (defpoll hm :interval "60s" :initial "" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "" `date +:%S`)
-(defpoll weekday :interval "3600s" :initial "" `date +%A`)
+(defpoll aqi :interval "300s" :initial "" `~/.config/eww/script/aqi|cut -d' ' -f1,5`)
+(defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
+(defpoll weekday :interval "3600s" :initial "" `date +%a`)
 (defpoll temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
 (deflisten workspace_ipc_DP1 "script/ipc 0")
 (deflisten workspace_ipc_DP2 "script/ipc 1")
@@ -15,7 +17,7 @@
   :exclusive true
   :orientation "horizontal"
   :focusable false
-  :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
+  :geometry (geometry :x "0" :y "0"  :width "100%" :height "30px" :anchor "top center")
   (box
     :class "workspace"
     :halign "center"
@@ -29,7 +31,7 @@
   :exclusive true
   :orientation "horizontal"
   :focusable false
-  :geometry (geometry :x "0" :y "0"  :width "100%" :height "20px" :anchor "top center")
+  :geometry (geometry :x "0" :y "0"  :width "100%" :height "15px" :anchor "top center")
   (centerbox
     :valign "start"
     :vexpand false
@@ -44,7 +46,13 @@
         (label :text sec))
       (box
         :class "weekday"
-        (label :text weekday)))
+        (label :text weekday)
+        (label :text date))
+      (box
+        :class "aqi"
+        (label :text "${replace(aqi, ' .*', '' )}")
+        (label :text "${replace(aqi, '.* ', '' )}" :class "aqitime")
+      ))
     (box
       :class "workspace"
       :halign "center"
