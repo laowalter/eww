@@ -34,7 +34,7 @@ $urgent: $red;
   // background-color: $background;
 }
 
-.workspace.eventbox {
+.workspace.nofocus {
   padding: 5px 5px 0px 5px;
   font-weight: 300;
   padding-top: 30px;
@@ -47,7 +47,7 @@ $urgent: $red;
   }
 }
 
-.workspace.eventboxfocus {
+.workspace.focus {
   padding: 5px 5px 0px 5px;
   min-width: 50px;
   font-weight: 300;
@@ -56,9 +56,17 @@ $urgent: $red;
   background-color: rgba($lightred, 0.6);
 }
 
+.workspace.prefocus {
+  padding: 5px 5px 0px 5px;
+  min-width: 50px;
+  font-weight: 300;
+  font-size: 20px;
+  border-radius: 25px 25px 25px 25px;
+  background-color: rgba($lightgreen, 0.6);
+}
 
 .timehm {
-  margin: 2px 0 0 2px;
+  margin: 2px 0 0 0;
   font-size: 22px;
   font-weight: bold;
   border-radius: 5px 0px 0px 5px;
@@ -70,23 +78,48 @@ $urgent: $red;
 
 .timesec {
   margin: 2px 2px 0 0;
-  padding-left: 0;
+  padding: 6px 0 0 0;
   font-weight: 300;
   background-color: rgba($background, 0.5);
   border-radius: 0px 5px 5px 0px;
-  padding-right: 0px;
 }
 
 .weekday {
-  margin-top: 2px;
-  margin-left: 20px;
-  padding-left: 5px;
-  padding-right: 5px;
+  margin: 2px 0 0 20px;
+  padding: 0 10px 0 2px;
   color: $yellow;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 5px 0px 0px 5px;
+  background-color: rgba($background, 0.5);
+}
+
+.date {
+  margin: 2px 0 0 0px;
+  // padding-right: 10px;
+  color: $yellow;
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 0px 5px 5px 0px;
+  background-color: rgba($background, 0.5);
+}
+
+.aqi {
+  margin: 2px 0 0 20px;
+  padding-left: 0px;
+  // color: $yellow;
   font-size: 20px;
   font-weight: 400;
   border-radius: 5px 5px 5px 5px;
   background-color: rgba($background, 0.5);
+
+}
+
+.aqitime {
+  font-size: 13px;
+  font-weight: 300;
+  color: $white;
+  padding-bottom: 5px;
 }
 
 .info {

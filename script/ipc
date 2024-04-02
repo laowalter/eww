@@ -4,7 +4,55 @@
 script_dir="$HOME/.config/eww/script"
 
 # Determine the focused monitor using the provided script
-monitor=$1
+query_monitorID=$1  # 0 or 1
+
+# if [[ -f /tmp/eww_prefocus ]]; then
+#   prefocus_workspace=$(cat /tmp/eww_prefocus)
+# else
+#   touch /tmp/eww_prefocus
+#   prefocus_workspace=""
+# fi
+
+function workspace () {
+  query_monitor_workspaces_name_list=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitorID=='$1').name')
+  active_window_monitorID=$(hyprctl -j activewindow|jq '.monitor')
+  active_window_workspace_name_list=$(hyprctl -j activewindow| jq '.workspace.name'|tail -c+2|head -c-2)
+  active_workspace_name=$(hyprctl activewindow -j|jq -r '.workspace.name')
+
+  # Split current_monitor_workspaces by \n into workspaces
+  SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
+  IFS=$'\n'      # Change IFS to newline char
+  query_workspaces=($query_monitor_workspaces_name_list) # split the `current_monitor_workspaces` string into an array by the same name
+  IFS=$SAVEIFS   # Restore original IFS
+  
+  result=''
+  for (( i=0; i<${#query_workspaces[@]}; i++ )) do
+  
+      if [[ $query_monitorID == $active_window_monitorID ]]; then
+          # focused on active monitor
+          if [[ $active_workspace_name == ${query_workspaces[i]} ]]; then
+            # echo "${query_workspaces[i]}" > /tmp/eww_prefocus
+            class_attr="\"workspace focus\""
+          else
+            class_attr="\"workspace nofocus\""
+          fi
+      else
+          # prefocus_workspace=$(cat /tmp/eww_prefocus)
+          # echo "prefocus_workspace: $prefocus_workspace" >> /tmp/ipc_log
+          # echo "query_workspaces: ${query_workspaces[i]}" >> /tmp/ipc_log
+          # if [[ $prefocus_workspace == ${query_workspaces[i]} ]]; then
+              # class_attr="\"workspace prefocus\""
+          # else
+              class_attr="\"workspace nofocus\""
+          # fi
+      fi
+
+      result=${result}"(eventbox :class ${class_attr} \
+             :onclick \"hyprctl dispatch workspace ${query_workspaces[i]}\" \
+             (label :width 35 :limit-width 10 :text \"${query_workspaces[i]}\"))"
+  done
+  echo "(box ${result})"
+}
 
 # Function to handle different commands/messages
 handle() {
@@ -13,21 +61,16 @@ handle() {
     activewindow*) 
       {
         # Call script with descriptive name for the monitor
-        "$script_dir/list_workspaces" "$monitor"
+        workspace "$query_monitorID" 
       };;
     workspace*) 
       {
         # Call script with descriptive name for the monitor
-        "$script_dir/list_workspaces" "$monitor"
-      };;
-    focusedmon*)
-      {
-        # Update monitor using provided script and call script with descriptive name for the monitor
-        # monitor=$("$script_dir/focused_monitor")
-        "$script_dir/list_workspaces" "$monitor"
+        workspace "$query_monitorID" 
       };;
   esac
 }
+
 
 # Read messages from a Unix domain socket and pass them to the handle function
 socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do
@@ -35,4 +78,3 @@ socat -U - UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | w
   command="$line"
   handle
 done
-
