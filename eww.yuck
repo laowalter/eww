@@ -49,7 +49,7 @@
         (label :text weekday :class "weekday"
                :style {weekday == "Fri"? "color: yellow;" : 
                        weekday =="Sat"? "color: green;" :
-                       weekday == "Sun"? "color: lightred;": ""})
+                       weekday == "Sun"? "color: lightred;": "color: white"})
         (label :text date :class "date"))
       (box
         :class "aqi"
