@@ -1,17 +1,20 @@
 ;;Variables
 (defpoll hm :interval "60s" :initial "" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "" `date +:%S`)
-(defpoll aqi_value :interval "300s" :initial "" `~/.config/eww/script/aqi|cut -d' ' -f1`)
+(defpoll aqi_value :interval "300s" :initial 0 `~/.config/eww/script/aqi|cut -d' ' -f1|bc`)
 (defpoll aqi :interval "300s" :initial "" `~/.config/eww/script/aqi|cut -d' ' -f1,5`)
 (defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
 (defpoll weekday :interval "3600s" :initial "" `date +%a`)
-(defpoll weather :interval "600s" :initial "" `~/.config/eww/script/weather`)
+(defpoll weather :interval "1800s" :initial "" `~/.config/eww/script/weather`)
 (defpoll device_temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
-
 (deflisten workspace_ipc_DP1 "script/ipc 0")
 (deflisten workspace_ipc_DP2 "script/ipc 1")
 (defvar radius "border-radius: 5px 5px 5px 5px;")
 (defvar workspace_eventbox "workspace eventbox")
+(defvar info_reveal false)
+(defvar eww "eww -c $HOME/.config/eww/")
+(defvar cal "2024")
+(defvar cal_reveal false)
 
 ;; Window bar
 (defwindow bar0
@@ -29,11 +32,10 @@
       :halign "center"
       (literal :valign "center"
                :content workspace_ipc_DP1))
-    (box
-      :orientation "h"
-      :halign "end"
-      (label :text weather
-             :class "weather"))))
+      (box
+        :orientation "h"
+        :halign "end"
+        (label :text weather :class "weather"))))
 
 (defwindow bar1
   :monitor 1
@@ -45,28 +47,40 @@
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "15px" :anchor "top center")
   (centerbox
     :vexpand false
-    (box
+    :valign "start"
+    (box ;;--------------time
       :halign "start"
       :space-evenly false
-      :valign "top"
       (box
         :class "timehm" 
         (label :text hm :valign "center" ))
       (box
         :class "timesec" 
-        (label :text sec :valign "bottom" ))
-      (box
-        :space-evenly false
-        (label :text weekday :class "weekday"
+        (label :text sec :valign "baseline" ))
+      (eventbox ;;----------------weekday and date
+        :onhover "${eww} update cal_reveal=true"
+        :onhoverlost "${eww} update cal_reveal=false"
+        (box
+          :space-evenly false
+          (label :text weekday :class "weekday"
                :valign "center"
                :style {weekday == "Fri"? "color: yellow;" : 
                        weekday =="Sat"? "color: green;" :
                        weekday == "Sun"? "color: lightred;": "color: white"})
-        (label :text date :class "date" :valign "center"))
+          (label :text date :class "date" :valign "center")
+          (revealer
+            :transition "slideright"
+            :duration "350ms"
+            :reveal cal_reveal
+            (box
+              :orientation "v"
+              :visible cal_reveal
+              (calendar :class 'calendar')
+            ))))
       (box
         :class "aqi"
         :valign "center"
-        (label :text "${replace(aqi, ' .*', '' )}" 
+        (label :text "${aqi_value}" 
                :valign "center"
                :style {aqi_value <= 50?  "color: white; background-color: #009966; ${radius}": 
                        aqi_value <= 100? "color: black; background-color: #ffde33; ${radius}":
@@ -77,15 +91,29 @@
         (label :class "aqitime" 
                :valign "center"
                :text "${replace(aqi, '.* ', '' )}")))
-    (box
+    (box ;;-------------workspace
       :class "workspace"
       :halign "center"
       (literal :valign "center"
                :content workspace_ipc_DP2))
-    (box
-      :class "info"
-      :space-evenly "false"
-      :halign "end"
-      (label :text "MEM:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
-      (label :text "CPU/GPU: ${device_temperature}" :class "info mem")
-    )))
+    (eventbox
+      :onhover "${eww} update info_reveal=true"
+      :onhoverlost "${eww} update info_reveal=false"
+      (box
+        :class "info"
+        :space-evenly "false"
+        :halign "end"
+        :vexpand true
+        (label :text "MEM:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
+        (label :text "CPU/GPU: ${device_temperature}" :class "info mem")
+        (revealer
+           :transition "slideright"
+           :duration "350ms"
+           :reveal info_reveal
+           (box
+              :orientation "v"
+            :visible info_reveal
+            (label :text "<-----------")
+           )
+        )))
+  ))

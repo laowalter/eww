@@ -88,6 +88,14 @@ $urgent: $red;
   background-color: rgba($background, 0.5);
 }
 
+.calendar {
+  margin-top: 2px;
+  color: $white;
+  background-color: $cyan;
+  font-size: 20px;
+  border-radius: 5px 5px 5px 5px;
+}
+
 .date {
   margin: 2px 0 0 0px;
   color: $yellow;
