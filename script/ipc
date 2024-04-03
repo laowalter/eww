@@ -14,6 +14,7 @@ query_monitorID=$1  # 0 or 1
 # fi
 
 function workspace () {
+  # query_monitor_workspaces_name_list=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitorID=='$1').name')
   query_monitor_workspaces_name_list=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitorID=='$1').name')
   active_window_monitorID=$(hyprctl -j activewindow|jq '.monitor')
   active_window_workspace_name_list=$(hyprctl -j activewindow| jq '.workspace.name'|tail -c+2|head -c-2)
@@ -27,6 +28,8 @@ function workspace () {
   
   result=''
   for (( i=0; i<${#query_workspaces[@]}; i++ )) do
+
+    if [[ ${query_workspaces[i]} != "special"* ]]; then
   
       if [[ $query_monitorID == $active_window_monitorID ]]; then
           # focused on active monitor
@@ -50,6 +53,7 @@ function workspace () {
       result=${result}"(eventbox :class ${class_attr} \
              :onclick \"hyprctl dispatch workspace ${query_workspaces[i]}\" \
              (label :width 35 :limit-width 10 :text \"${query_workspaces[i]}\"))"
+    fi
   done
   echo "(box ${result})"
 }
