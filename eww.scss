@@ -77,7 +77,7 @@ $urgent: $red;
 
 .timesec {
   margin: 2px 2px 0 0;
-  padding: 6px 2px 0 0;
+  padding: 5px 2px 0 0;
   font-weight: 300;
   background-color: rgba($background, 0.5);
   border-radius: 0px 5px 5px 0px;
@@ -104,20 +104,18 @@ $urgent: $red;
 
 .aqi {
   margin: 2px 0 0 20px;
-  padding-left: 0px;
   font-size: 20px;
-  font-weight: 400;
-  border-radius: 5px 5px 5px 5px;
-  background-color: rgba($background, 0.5);
-
+  // font-weight: 400;
+  // border-radius: 5px 5px 5px 5px;
 }
 
+//
 .aqitime {
   font-size: 13px;
-  font-weight: 300;
-  color: $white;
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
+
+//
 
 .info {
   margin-right: 10px;

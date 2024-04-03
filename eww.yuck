@@ -6,8 +6,10 @@
 (defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
 (defpoll weekday :interval "3600s" :initial "" `date +%a`)
 (defpoll temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
+
 (deflisten workspace_ipc_DP1 "script/ipc 0")
 (deflisten workspace_ipc_DP2 "script/ipc 1")
+(defvar radius "border-radius: 5px 5px 5px 5px;")
 (defvar workspace_eventbox "workspace eventbox")
 
 ;; Window bar
@@ -54,14 +56,14 @@
       (box
         :class "aqi"
         (label :text "${replace(aqi, ' .*', '' )}" 
-               :style {aqi_value <= 50?  "color: white; background-color: #009966; border-radius: 5px 5px 5px 5px;": 
-                       aqi_value <= 100? "color: black; background-color: #ffde33; border-radius: 5px 5px 5px 5px;":
-                       aqi_value <= 150? "color: black; background-color: #ff9933; border-radius: 5px 5px 5px 5px;":
-                       aqi_value <= 200? "color: white; background-color: #cc0033; border-radius: 5px 5px 5px 5px;":
-                       aqi_value <= 300? "color: white; background-color: #660099; border-radius: 5px 5px 5px 5px;":
-                                         "color: white; background-color: #7e0023; border-radius: 5px 5px 5px 5px;"})
-        (label :text "${replace(aqi, '.* ', '' )}" :class "aqitime")
-      ))
+               :style {aqi_value <= 50?  "color: white; background-color: #009966; ${radius}": 
+                       aqi_value <= 100? "color: black; background-color: #ffde33; ${radius}":
+                       aqi_value <= 150? "color: black; background-color: #ff9933; ${radius}":
+                       aqi_value <= 200? "color: white; background-color: #cc0033; ${radius}":
+                       aqi_value <= 300? "color: white; background-color: #660099; ${radius}":
+                                         "color: white; background-color: #7e0023; ${radius}"})
+        (label :class "aqitime" 
+               :text "${replace(aqi, '.* ', '' )}")))
     (box
       :class "workspace"
       :halign "center"
@@ -73,3 +75,9 @@
       (label :text "M:${round(EWW_RAM.free_mem/1000000000, 0)}G/32G" :style "color: black")
       (label :text "CPU/GPU: ${temperature}" :style "color: black")
     )))
+
+(defwidget revealer [var varname ?class ?duration ?transition]
+  (box :class "${vlass} revealer"
+       :orientation "h"
+       :space-evenly false
+       (children :nth 0)))
