@@ -75,9 +75,3 @@
       (label :text "M:${round(EWW_RAM.free_mem/1000000000, 0)}G/32G" :style "color: black")
       (label :text "CPU/GPU: ${temperature}" :style "color: black")
     )))
-
-(defwidget revealer [var varname ?class ?duration ?transition]
-  (box :class "${vlass} revealer"
-       :orientation "h"
-       :space-evenly false
-       (children :nth 0)))
