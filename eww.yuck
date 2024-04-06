@@ -4,7 +4,7 @@
 (defpoll aqi_value :interval "300s" :initial 0 `~/.config/eww/script/aqi|cut -d' ' -f1|bc`)
 (defpoll aqi :interval "300s" :initial "" `~/.config/eww/script/aqi|cut -d' ' -f1,5`)
 (defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
-(defpoll weekday :interval "3600s" :initial "" `date +%a`)
+(defpoll weekday :interval "3600s" :initial "" `date +%A`)
 (defpoll weather :interval "1800s" :initial "" `~/.config/eww/script/weather`)
 (defpoll device_temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
 (deflisten workspace_ipc_DP1 "script/ipc 0")
@@ -15,6 +15,7 @@
 (defvar eww "eww -c $HOME/.config/eww/")
 (defvar cal "2024")
 (defvar cal_reveal false)
+(defvar aqicn "firefox -p flee -url https://aqicn.org" )
 
 ;; Window bar
 (defwindow bar0
@@ -64,19 +65,21 @@
           :space-evenly false
           (label :text weekday :class "weekday"
                :valign "center"
-               :style {weekday == "Fri"? "color: yellow;" : 
-                       weekday =="Sat"? "color: green;" :
-                       weekday == "Sun"? "color: lightred;": "color: white"})
+               :style {weekday == "Friday"? "color: yellow;" : 
+                       weekday =="Saturday"? "color: green;" :
+                       weekday == "Sunday"? "color: lightred;": "color: white"})
           (label :text date :class "date" :valign "center")
           (revealer
             :transition "slideright"
             :duration "350ms"
             :reveal cal_reveal
             (box
-              :orientation "v"
+              :orientation "h"
               :visible cal_reveal
               (calendar :class 'calendar')
             ))))
+      (eventbox
+        :onclick "${aqicn}"
       (box
         :class "aqi"
         :valign "center"
@@ -90,7 +93,7 @@
                                          "color: white; background-color: #7e0023; ${radius}"})
         (label :class "aqitime" 
                :valign "center"
-               :text "${replace(aqi, '.* ', '' )}")))
+               :text "${replace(aqi, '.* ', '' )}"))))
     (box ;;-------------workspace
       :class "workspace"
       :halign "center"
@@ -111,9 +114,6 @@
            :duration "350ms"
            :reveal info_reveal
            (box
-              :orientation "v"
-            :visible info_reveal
-            (label :text "<-----------")
-           )
-        )))
-  ))
+             :orientation "h"
+             :visible info_reveal
+             (label :text "<-----------")))))))
