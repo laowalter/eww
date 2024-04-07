@@ -1,3 +1,6 @@
+
+;; (include "calendar.yuck")
+
 ;;Variables
 (defpoll hm :interval "60s" :initial "" `date +%H:%M`)
 (defpoll sec :interval "1s" :initial "" `date +:%S`)
@@ -6,6 +9,7 @@
 (defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
 (defpoll weekday :interval "3600s" :initial "" `date +%A`)
 (defpoll weather :interval "1800s" :initial "" `~/.config/eww/script/weather`)
+;; (defpoll cal3 :interval "10000s" :initial "" `cal|tr '\n' '\\n'`)
 (defpoll device_temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
 (deflisten workspace_ipc_DP1 "script/ipc 0")
 (deflisten workspace_ipc_DP2 "script/ipc 1")
@@ -13,10 +17,17 @@
 (defvar workspace_eventbox "workspace eventbox")
 (defvar info_reveal false)
 (defvar eww "eww -c $HOME/.config/eww/")
-(defvar cal "2024")
-(defvar cal_reveal false)
 (defvar aqicn "firefox -p flee -url https://aqicn.org" )
 
+(defwindow calendar_win
+  :monitor 1
+  :stracking "fg"
+  :exclusive false
+  :orientation "horizontal"
+  :geometry (geometry :x "120" :y "50"  :width "200" :height "30px" :anchor "top left")
+  (calendar :class "calendar")
+  ;; (label :text "${cal3}" :style "background-color: grey; text-aligh:right;")
+)
 ;; Window bar
 (defwindow bar0
   :monitor 0
@@ -50,7 +61,6 @@
     :vexpand false
     :valign "start"
     (box ;;--------------time
-      :halign "start"
       :space-evenly false
       (box
         :class "timehm" 
@@ -59,41 +69,34 @@
         :class "timesec" 
         (label :text sec :valign "baseline" ))
       (eventbox ;;----------------weekday and date
-        :onhover "${eww} update cal_reveal=true"
-        :onhoverlost "${eww} update cal_reveal=false"
+        :onhover "${eww} open calendar_win"
+        :onhoverlost "${eww} close calendar_win"
         (box
           :space-evenly false
           (label :text weekday :class "weekday"
                :valign "center"
-               :style {weekday == "Friday"? "color: yellow;" : 
-                       weekday =="Saturday"? "color: green;" :
-                       weekday == "Sunday"? "color: lightred;": "color: white"})
-          (label :text date :class "date" :valign "center")
-          (revealer
-            :transition "slideright"
-            :duration "350ms"
-            :reveal cal_reveal
-            (box
-              :orientation "h"
-              :visible cal_reveal
-              (calendar :class 'calendar')
-            ))))
+               :style {weekday == "Friday"? "color:black;background-color: #ffde33;" : 
+                       weekday =="Saturday"? "color white; background-color: #009966" :
+                       weekday == "Sunday"? "color: white; background-color: #cc0033;": "color:white; background-color: grey"})
+          (label :text date :class "date" :valign "center")))
       (eventbox
         :onclick "${aqicn}"
-      (box
-        :class "aqi"
-        :valign "center"
-        (label :text "${aqi_value}" 
-               :valign "center"
-               :style {aqi_value <= 50?  "color: white; background-color: #009966; ${radius}": 
-                       aqi_value <= 100? "color: black; background-color: #ffde33; ${radius}":
-                       aqi_value <= 150? "color: black; background-color: #ff9933; ${radius}":
-                       aqi_value <= 200? "color: white; background-color: #cc0033; ${radius}":
-                       aqi_value <= 300? "color: white; background-color: #660099; ${radius}":
-                                         "color: white; background-color: #7e0023; ${radius}"})
-        (label :class "aqitime" 
-               :valign "center"
-               :text "${replace(aqi, '.* ', '' )}"))))
+        (box
+          :class "aqi"
+          :valign "center"
+          (label
+            :text "${aqi_value}" 
+            :valign "center"
+            :style {aqi_value <= 50?  "color: white; background-color: #009966; ${radius}": 
+                    aqi_value <= 100? "color: black; background-color: #ffde33; ${radius}":
+                    aqi_value <= 150? "color: black; background-color: #ff9933; ${radius}":
+                    aqi_value <= 200? "color: white; background-color: #cc0033; ${radius}":
+                    aqi_value <= 300? "color: white; background-color: #660099; ${radius}":
+                                      "color: white; background-color: #7e0023; ${radius}"})
+          (label
+            :class "aqitime" 
+            :valign "center"
+            :text "${replace(aqi, '.* ', '' )}"))))
     (box ;;-------------workspace
       :class "workspace"
       :halign "center"
@@ -117,3 +120,4 @@
              :orientation "h"
              :visible info_reveal
              (label :text "<-----------")))))))
+

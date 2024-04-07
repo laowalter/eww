@@ -1,0 +1,7 @@
+(defwindow calendar_window []
+  :monitor 1
+  :stacking "fg"
+  :windowtype "overlap"
+  (box
+    (label :text "openadf")
+  ))

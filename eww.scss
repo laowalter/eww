@@ -79,8 +79,8 @@ $urgent: $red;
 }
 
 .weekday {
-  margin: 2px 0 0 20px;
-  padding: 0 10px 0 2px;
+  margin: 2px 0 0 0px;
+  padding: 0 2px 0 2px;
   color: $yellow;
   font-size: 20px;
   font-weight: 400;
@@ -98,6 +98,7 @@ $urgent: $red;
 
 .date {
   margin: 2px 0 0 0px;
+  padding-left: 5px;
   color: $yellow;
   font-size: 20px;
   font-weight: 400;
