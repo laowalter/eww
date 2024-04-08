@@ -67,7 +67,8 @@ $urgent: $red;
   font-weight: bold;
   border-radius: 5px 0px 0px 5px;
   padding-left: 2px;
-  color: $lightred;
+  // color: $lightred;
+  color: $white;
   margin-left: 0px;
 }
 
@@ -79,7 +80,7 @@ $urgent: $red;
 }
 
 .weekday {
-  margin: 2px 0 0 0px;
+  margin: 2px 0 0 20px;
   padding: 0 2px 0 2px;
   color: $yellow;
   font-size: 20px;

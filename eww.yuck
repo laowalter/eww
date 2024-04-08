@@ -119,5 +119,7 @@
            (box
              :orientation "h"
              :visible info_reveal
-             (label :text "<-----------")))))))
+             (button
+                :onclick "sudo shutdown -h now")
+                (label :text "SHUTDOWN")))))))
 
