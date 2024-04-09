@@ -121,6 +121,5 @@
              :orientation "h"
              :visible info_reveal
              (button
-                :onclick "scripts/shutdown")
-                (label :text "SHUTDOWN")))))))
+                :onclick "${shutdown}" "SHUTDOWN")))))))
 
