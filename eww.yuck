@@ -18,6 +18,7 @@
 (defvar info_reveal false)
 (defvar eww "eww -c $HOME/.config/eww/")
 (defvar aqicn "firefox -p flee -url https://aqicn.org" )
+(defvar shutdown "sudo shutdown -h now")
 
 (defwindow calendar_win
   :monitor 1
@@ -120,6 +121,6 @@
              :orientation "h"
              :visible info_reveal
              (button
-                :onclick "sudo shutdown -h now")
+                :onclick "scripts/shutdown")
                 (label :text "SHUTDOWN")))))))
 
