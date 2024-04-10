@@ -25,9 +25,7 @@
   :exclusive false
   :orientation "horizontal"
   :geometry (geometry :x "120" :y "50"  :width "200" :height "30px" :anchor "top left")
-  (calendar :class "calendar")
-  ;; (label :text "${cal3}" :style "background-color: grey; text-aligh:right;")
-)
+  (calendar :class "calendar" :show-details false :show-week-numbers true))
 ;; Window bar
 (defwindow bar0
   :monitor 0

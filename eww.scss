@@ -109,6 +109,9 @@ $urgent: $red;
   border-radius: 5px 5px 5px 5px;
 }
 
+.calendar:selected {
+  background: $yellow;
+}
 
 .aqi {
   margin: 2px 0 0 20px;
