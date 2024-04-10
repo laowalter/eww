@@ -18,7 +18,6 @@
 (defvar info_reveal false)
 (defvar eww "eww -c $HOME/.config/eww/")
 (defvar aqicn "firefox -p flee -url https://aqicn.org" )
-(defvar shutdown "sudo shutdown -h now")
 
 (defwindow calendar_win
   :monitor 1
@@ -45,10 +44,10 @@
       :halign "center"
       (literal :valign "center"
                :content workspace_ipc_DP1))
-      (box
-        :orientation "h"
-        :halign "end"
-        (label :text weather :class "weather"))))
+    (box
+      :orientation "h"
+      :halign "end"
+      (label :text weather :class "weather"))))
 
 (defwindow bar1
   :monitor 1
@@ -120,6 +119,22 @@
            (box
              :orientation "h"
              :visible info_reveal
-             (button
-                :onclick "${shutdown}" "SHUTDOWN")))))))
+             (eventbox
+                :onclick "sudo shutdown -h now"
+                :valign "center" :halign "center"
+                (image :path "icons/poweroff.png" :image-width 25 :image-height 50))))))))
 
+(defwindow shutdown_win
+  :monitor 1
+  :stacking "fg"
+  :windowtype "dock"
+  :orientation "vertical"
+  :geometry (geometry :x "0" :y "50"  :width "100" :height "100px" :anchor "top center")
+  (eventbox
+    :onclick "sudo shutdown -h now"
+    :style "background-image: url('icons/power-button.svg'); background-repeat: no-repeat; background-size: contain;"
+    :valign "center" :halign "center"
+    (image 
+      :path "icons/power-button.svg" 
+      :image-width 25 
+      :image-height 50)))

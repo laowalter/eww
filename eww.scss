@@ -62,7 +62,7 @@ $urgent: $red;
 }
 
 .timehm {
-  margin: 2px 0 0 0;
+  margin: 0 0 0 0;
   font-size: 22px;
   font-weight: bold;
   border-radius: 5px 0px 0px 5px;
@@ -75,7 +75,8 @@ $urgent: $red;
 .timesec {
   margin: 2px 2px 0 0;
   padding: 5px 2px 0 0;
-  font-weight: 300;
+  font-weight: 400;
+  color: $white;
   border-radius: 0px 5px 5px 0px;
 }
 
