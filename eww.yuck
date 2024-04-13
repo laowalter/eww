@@ -17,7 +17,7 @@
 (defvar workspace_eventbox "workspace eventbox")
 (defvar info_reveal false)
 (defvar eww "eww -c $HOME/.config/eww/")
-(defvar aqicn "firefox -p flee -url https://aqicn.org" )
+(defvar aqicn_firefox "firefox -p flee -url https://aqicn.org" )
 
 (defwindow calendar_win
   :monitor 1
@@ -67,18 +67,17 @@
         :class "timesec" 
         (label :text sec :valign "baseline" ))
       (eventbox ;;----------------weekday and date
-        :onhover "${eww} open calendar_win"
-        :onhoverlost "${eww} close calendar_win"
+        :onclick "${eww} open --toggle calendar_win"
         (box
           :space-evenly false
           (label :text weekday :class "weekday"
                :valign "center"
-               :style {weekday == "Friday"? "color:black;background-color: #ffde33;" : 
-                       weekday =="Saturday"? "color white; background-color: #009966" :
-                       weekday == "Sunday"? "color: white; background-color: #cc0033;": "color:black; background-color: #03d08b"})
+               :style {weekday == "Friday"?  "color: black; background-color: #ffde33;" : 
+                       weekday =="Saturday"? "color: white; background-color: #009966;" :
+                       weekday == "Sunday"?  "color: white; background-color: #cc0033;" : "color:black; background-color: #03d08b"})
           (label :text date :class "date" :valign "center")))
       (eventbox
-        :onclick "${aqicn}"
+        :onclick "${aqicn_firefox}"
         (box
           :class "aqi"
           :valign "center"
@@ -95,12 +94,14 @@
             :class "aqitime" 
             :valign "center"
             :text "${replace(aqi, '.* ', '' )}"))))
+
     (box ;;-------------workspace
       :class "workspace"
       :halign "center"
       (literal :valign "center"
                :content workspace_ipc_DP2))
-    (eventbox
+
+    (eventbox ;; ------------info
       :onhover "${eww} update info_reveal=true"
       :onhoverlost "${eww} update info_reveal=false"
       (box
@@ -108,8 +109,8 @@
         :space-evenly "false"
         :halign "end"
         :vexpand true
-        (label :text "MEM:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
-        (label :text "CPU/GPU: ${device_temperature}" :class "info mem")
+        (label :text "M:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
+        (label :text "C/U: ${device_temperature}" :class "info mem")
         (revealer
            :transition "slideright"
            :duration "350ms"
@@ -127,7 +128,7 @@
   :stacking "fg"
   :windowtype "dock"
   :orientation "vertical"
-  :geometry (geometry :x "0" :y "50"  :width "100" :height "100px" :anchor "top center")
+  :geometry (geometry :x "0" :y "50"  :width "100px" :height "100px" :anchor "top right")
   (eventbox
     :onclick "sudo shutdown -h now"
     :style "background-image: url('icons/power-button.svg'); background-repeat: no-repeat; background-size: contain;"
