@@ -35,8 +35,13 @@
   :orientation "horizontal"
   :focusable false
   :geometry (geometry :x "0" :y "0"  :width "100%" :height "30px" :anchor "top center")
-  (centerbox
-    (box)
+  (centerbox :vexpand false :valign "start"
+    (box
+      :space-evenly false
+      (box :class "timehm"
+        (label :text hm :valign "center"))
+        (box :class "timesec" 
+          (label :text sec :valign "baseline" )))
     (box
       :class "workspace"
       :halign "center"
@@ -67,14 +72,15 @@
         :class "timesec" 
         (label :text sec :valign "baseline" ))
       (eventbox ;;----------------weekday and date
-        :onclick "${eww} open --toggle calendar_win"
+        :onclick "sleep 0.1 && ${eww} open --toggle calendar_win" ;;https://github.com/elkowar/eww/issues/1008
         (box
           :space-evenly false
-          (label :text weekday :class "weekday"
-               :valign "center"
-               :style {weekday == "Friday"?  "color: black; background-color: #ffde33;" : 
-                       weekday =="Saturday"? "color: white; background-color: #009966;" :
-                       weekday == "Sunday"?  "color: white; background-color: #cc0033;" : "color:black; background-color: #03d08b"})
+          (label 
+            :text weekday :class "weekday"
+            :valign "center"
+            :style {weekday == "Friday"?  "color: black; background-color: #ffde33;" : 
+                    weekday =="Saturday"? "color: white; background-color: #009966;" :
+                    weekday == "Sunday"?  "color: white; background-color: #cc0033;" : "color:black; background-color: #03d08b"})
           (label :text date :class "date" :valign "center")))
       (eventbox
         :onclick "${aqicn_firefox}"
@@ -112,16 +118,16 @@
         (label :text "M:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
         (label :text "C/U: ${device_temperature}" :class "info mem")
         (revealer
-           :transition "slideright"
-           :duration "350ms"
-           :reveal info_reveal
-           (box
-             :orientation "h"
-             :visible info_reveal
-             (eventbox
-                :onclick "sudo shutdown -h now"
-                :valign "center" :halign "center"
-                (image :path "icons/poweroff.png" :image-width 25 :image-height 50))))))))
+          :transition "slideright"
+          :duration "350ms"
+          :reveal info_reveal
+          (box
+            :orientation "h"
+            :visible info_reveal
+            (eventbox
+              :onclick "sudo shutdown -h now"
+              :valign "center" :halign "center"
+              (image :path "icons/poweroff.png" :image-width 25 :image-height 50))))))))
 
 (defwindow shutdown_win
   :monitor 1
