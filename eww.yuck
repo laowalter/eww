@@ -116,7 +116,7 @@
         :halign "end"
         :vexpand true
         (label :text "M:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
-        (label :text "C/U: ${device_temperature}" :class "info mem")
+        (label :text "C/G: ${device_temperature}" :class "info mem")
         (revealer
           :transition "slideright"
           :duration "350ms"
