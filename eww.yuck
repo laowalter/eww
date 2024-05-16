@@ -2,15 +2,14 @@
 ;; (include "calendar.yuck")
 
 ;;Variables
-(defpoll hm :interval "60s" :initial "" `date +%H:%M`)
-(defpoll sec :interval "1s" :initial "" `date +:%S`)
+(defpoll hm :interval "10s" :initial "" `date +%H:%M`)
+;; (defpoll sec :interval "1s" :initial "" `date +:%S`)
 (defpoll aqi_value :interval "300s" :initial 0 `~/.config/eww/script/aqi|cut -d' ' -f1|bc`)
 (defpoll aqi :interval "300s" :initial "" `~/.config/eww/script/aqi|cut -d' ' -f1,5`)
 (defpoll date :interval "600s" :initial "" `date +'%d/%m'`)
 (defpoll weekday :interval "3600s" :initial "" `date +%A`)
 (defpoll weather :interval "1800s" :initial "" `~/.config/eww/script/weather`)
-;; (defpoll cal3 :interval "10000s" :initial "" `cal|tr '\n' '\\n'`)
-(defpoll device_temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')°C"`)
+(defpoll device_temperature :interval "10s" :initial "" `echo "$(sensors|grep -i 'Package id'|awk '{print $4}'|cut -c2-|rev|cut -c 6-|rev)/$(nvidia-smi -q -d TEMPERATURE|grep "GPU Current Temp"|awk '{print $5}')"`)
 (deflisten workspace_ipc_DP1 "script/ipc 0")
 (deflisten workspace_ipc_DP2 "script/ipc 1")
 (defvar radius "border-radius: 5px 5px 5px 5px;")
@@ -40,8 +39,9 @@
       :space-evenly false
       (box :class "timehm"
         (label :text hm :valign "center"))
-        (box :class "timesec" 
-          (label :text sec :valign "baseline" )))
+        ;; (box :class "timesec" 
+        ;;   (label :text sec :valign "baseline" ))
+    )
     (box
       :class "workspace"
       :halign "center"
@@ -68,9 +68,9 @@
       (box
         :class "timehm" 
         (label :text hm :valign "center" ))
-      (box
-        :class "timesec" 
-        (label :text sec :valign "baseline" ))
+      ;; (box
+      ;;   :class "timesec" 
+      ;;   (label :text sec :valign "baseline" ))
       (eventbox ;;----------------weekday and date
         :onclick "sleep 0.1 && ${eww} open --toggle calendar_win" ;;https://github.com/elkowar/eww/issues/1008
         (box
@@ -116,7 +116,7 @@
         :halign "end"
         :vexpand true
         (label :text "M:${round(EWW_RAM.used_mem_perc,2)}%" :class "info mem")
-        (label :text "C/G: ${device_temperature}" :class "info mem")
+        (label :text "°C:${device_temperature}" :class "info mem")
         (revealer
           :transition "slideright"
           :duration "350ms"
