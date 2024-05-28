@@ -9,6 +9,7 @@ monitor_queryed=$1
 
 # Get specific monitor $1 's workspaces list output: 1\n3\n10\n
 current_monitor_workspaces=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitor=="'$monitor_queryed'").name')
+# current_monitor_workspaces=$(hyprctl -j workspaces|jq -r '.[]|select(.monitor=="'$monitor_queryed'").name')
 active_monitor=$(hyprctl -j monitors | jq -r '.[]|select(.focused)|.name')
 active_workspace_name=$(hyprctl activewindow -j|jq -r '.workspace.name')
 # Split current_monitor_workspaces by \n into workspaces
