@@ -15,7 +15,7 @@
 (defvar radius "border-radius: 5px 5px 5px 5px;")
 (defvar workspace_eventbox "workspace eventbox")
 (defvar info_reveal false)
-(defpoll volume :interval "2s" :initial "" `~/.config/eww/script/volume.sh`)
+(defpoll volume :interval "2s" :initial 0 `~/.config/eww/script/volume.sh|bc`)
 (defvar eww "eww -c $HOME/.config/eww/")
 (defvar aqicn_firefox "firefox -p flee -url https://aqicn.org" )
 
@@ -119,7 +119,7 @@
         (label :text "Vol:${volume}" :class "info mem"
                :style {volume >=0? "color: white;":
                                    "color: red"})
-        (label :text "M:${round(EWW_RAM.used_mem_perc,0)}%" :class "info mem")
+        (label :text "Mem:${round(EWW_RAM.used_mem_perc,0)}%" :class "info mem")
         (label :text "°C:${device_temperature}" :class "info mem")
         (revealer
           :transition "slideright"

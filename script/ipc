@@ -4,34 +4,46 @@
 script_dir="$HOME/.config/eww/script"
 
 # Determine the focused monitor using the provided script
-query_monitorID=$1  # 0 or 1
+query_monitorID=$1 # 0 or 1
 
-function workspace () {
-  query_monitor_workspaces_name_list=$(hyprctl -j workspaces|jq 'sort_by(.name)'|jq -r '.[]|select(.monitorID=='$1').name')
-  active_window_monitorID=$(hyprctl -j activewindow|jq '.monitor')
-  active_window_workspace_name_list=$(hyprctl -j activewindow|jq 'sort_by(.name)'|jq '.workspace.name'|tail -c+2|head -c-2)
-  active_workspace_name=$(hyprctl activewindow -j|jq -r '.workspace.name')
+function workspace() {
+  # query_monitor_workspaces_name_list=$(hyprctl -j workspaces | jq 'sort_by(.name)' | jq -r '.[]|select(.monitorID=='$1').name')
+  query_monitor_workspaces_name_list=$(hyprctl -j workspaces | jq --argjson m_id "$query_monitorID" '
+    # 过滤出符合条件的工作区
+    map(select(.monitorID == $m_id)) |
+    # 将名称分为数字和非数字两部分
+    . as $workspaces |
+    (map(select(.name | test("^[0-9]+$"))) | sort_by(.name | tonumber)) as $numeric |
+    (map(select(.name | test("^[0-9]+$") | not)) | sort_by(.name)) as $non_numeric |
+    # 合并排序后的结果
+    ($numeric + $non_numeric) | .[].name')
+
+  query_monitor_workspaces_name_list=${query_monitor_workspaces_name_list//\"/} # remove all the double quotes
+
+  active_window_monitorID=$(hyprctl -j activewindow | jq '.monitor')
+  active_window_workspace_name_list=$(hyprctl -j activewindow | jq 'sort_by(.name)' | jq '.workspace.name' | tail -c+2 | head -c-2)
+  active_workspace_name=$(hyprctl activewindow -j | jq -r '.workspace.name')
 
   # Split current_monitor_workspaces by \n into workspaces
-  SAVEIFS=$IFS   # Save current IFS (Internal Field Separator)
-  IFS=$'\n'      # Change IFS to newline char
+  SAVEIFS=$IFS                                           # Save current IFS (Internal Field Separator)
+  IFS=$'\n'                                              # Change IFS to newline char
   query_workspaces=($query_monitor_workspaces_name_list) # split the `current_monitor_workspaces` string into an array by the same name
-  IFS=$SAVEIFS   # Restore original IFS
-  
+  IFS=$SAVEIFS                                           # Restore original IFS0
+
   result=''
-  for (( i=0; i<${#query_workspaces[@]}; i++ )) do
+  for ((i = 0; i < ${#query_workspaces[@]}; i++)); do
 
     if [[ ${query_workspaces[i]} != "special"* ]]; then
-  
+
       if [[ $query_monitorID == $active_window_monitorID ]]; then
-          # focused on active monitor
-          if [[ $active_workspace_name == ${query_workspaces[i]} ]]; then
-            class_attr="\"workspace focus\""
-          else
-            class_attr="\"workspace nofocus\""
-          fi
-      else
+        # focused on active monitor
+        if [[ $active_workspace_name == ${query_workspaces[i]} ]]; then
+          class_attr="\"workspace focus\""
+        else
           class_attr="\"workspace nofocus\""
+        fi
+      else
+        class_attr="\"workspace nofocus\""
       fi
 
       result=${result}"(eventbox :class ${class_attr} \
@@ -46,19 +58,20 @@ function workspace () {
 handle() {
   # Use descriptive variable name instead of $1
   case $command in
-    activewindow*) 
-      {
-        # Call script with descriptive name for the monitor
-        workspace "$query_monitorID" 
-      };;
-    workspace*) 
-      {
-        # Call script with descriptive name for the monitor
-        workspace "$query_monitorID" 
-      };;
+  activewindow*)
+    {
+      # Call script with descriptive name for the monitor
+      workspace "$query_monitorID"
+    }
+    ;;
+  workspace*)
+    {
+      # Call script with descriptive name for the monitor
+      workspace "$query_monitorID"
+    }
+    ;;
   esac
 }
-
 
 # Read messages from a Unix domain socket and pass them to the handle function
 socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock | while read -r line; do
